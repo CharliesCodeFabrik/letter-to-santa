@@ -54,6 +54,7 @@ export interface NexusGenFieldTypes {
     url: string; // String!
   }
   Mutation: { // field return type
+    delete: NexusGenRootTypes['Letter']; // Letter!
     post: NexusGenRootTypes['Letter']; // Letter!
   }
   Query: { // field return type
@@ -69,6 +70,7 @@ export interface NexusGenFieldTypeNames {
     url: 'String'
   }
   Mutation: { // field return type name
+    delete: 'Letter'
     post: 'Letter'
   }
   Query: { // field return type name
@@ -79,6 +81,9 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    delete: { // args
+      id: number; // Int!
+    }
     post: { // args
       description: string; // String!
       url: string; // String!

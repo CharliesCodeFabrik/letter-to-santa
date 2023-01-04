@@ -1,7 +1,7 @@
 //import { Letter } from "@prisma/client";
 //import { extendType, nonNull, stringArg, intArg, objectType } from "nexus";
 import e from "cors";
-import { extendType, intArg, nonNull, objectType, stringArg } from "nexus";
+import { extendType, intArg, nonNull, objectType, stringArg,idArg } from "nexus";
 
 export let Letter = objectType({
     name: "Letter", // 1 
@@ -60,11 +60,8 @@ export const LinkMutation = extendType({  // 1
             async resolve(parent, args, context) {    
                 const { description, url } = args;  // 4
                 
-                let idCount = (await context.prisma.letter.findMany()).length + 1;  // 5
-                
                 return context.prisma.letter.create({
                     data: {
-                        id: idCount,
                         description: description,
                         url: url,
                     }
@@ -99,34 +96,22 @@ export const UpdateLinkMutation = extendType({  // 1
 });
 */
 
-/*
-export const DeleteLetterMutation = extendType({  // 1
+export const LetterDeleteMutation = extendType({  // 1
     type: "Mutation",    
     definition(t) {
-        t.nonNull.field("deleteLetter", {  // 2
+        t.nonNull.field("delete", {  // 2
             type: "Letter",  
             args: {   // 3
                 id: nonNull(intArg()),
             },
             
-            resolve(parent, args, context) { // 4
-                let letter = context.prisma.letter.findMany().find( (lett:Letter) => lett.id == args.id)
-                let result : {description:string, id:number, url:string};
-                if(letter){
-                    result = {description:letter.description, id:letter.id, url:letter.url}
-                    const id = context.prisma.letter.findMany().indexOf(letter).id;
-                    context.prisma.letter.delete({
-                        where: {
-                            key: id,
-                        }
-                    });
-                }
-                else {
-                    result = {description:"not Found", id:-1, url:"not Found"}
-                }
-                return result;
+            async resolve(parent, args, context) {    
+                const { id } = args;  // 4
+                
+                return context.prisma.letter.delete({
+                    where: { id: id},
+                  })
             },
         });
     },
 });
-*/

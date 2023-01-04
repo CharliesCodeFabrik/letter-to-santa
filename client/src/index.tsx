@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import { LettersList } from './App';
 import reportWebVitals from './reportWebVitals';
 import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
+import App from './App'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const client = new ApolloClient({
   uri: 'http://localhost:3000/',
@@ -14,12 +15,6 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 
-const App = () => {
-  return <div>
-      <h1>Hey Whats up guys</h1>
-      <div><LettersList/></div>
-  </div>
-}
 
 root.render(
   <ApolloProvider client={client}>

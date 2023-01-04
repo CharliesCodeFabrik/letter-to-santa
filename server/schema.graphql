@@ -9,6 +9,7 @@ type Letter {
 }
 
 type Mutation {
+  delete(id: Int!): Letter!
   post(description: String!, url: String!): Letter!
 }
 
