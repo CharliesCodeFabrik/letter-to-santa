@@ -2,18 +2,35 @@
 ### Do not make changes to this file directly
 
 
+type AuthPayload {
+  token: String!
+  user: User!
+}
+
 type Letter {
   description: String!
   id: Int!
   url: String!
+  userId: User
 }
 
 type Mutation {
   delete(id: Int!): Letter!
-  post(description: String!, url: String!): Letter!
+  deleteUser(id: Int!): User!
+  login(email: String!, password: String!): AuthPayload!
+  post(description: String!, url: String!, userId: Int!): Letter!
+  signup(email: String!, name: String!, password: String!): AuthPayload!
 }
 
 type Query {
   feed: [Letter!]!
   letter(id: Int!): Letter
+}
+
+type User {
+  email: String!
+  id: Int!
+  letters: [Letter!]!
+  password: String!
+  username: String!
 }

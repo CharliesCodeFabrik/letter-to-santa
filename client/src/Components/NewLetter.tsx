@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import './../Sass/main_style.scss'
-
+import Stack from 'react-bootstrap/Stack';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
@@ -41,10 +41,6 @@ export function NewLetter(){
     const [desc, setDesc] = useState("");
     const [url, setUrl] = useState("");
 
-    function updateSite (){
-      
-    }
-
     const [addTodo, { data, loading, error }] = useMutation(POST_LETTER);
 
     const handleClose = () => {
@@ -53,22 +49,28 @@ export function NewLetter(){
     };
     const handleShow = () => {setShow(true)};
     return(<div>
-        <Button onClick={handleShow}>Schreibe einen Brief an Santa</Button>
+        <Button variant='outline-info' size='lg' onClick={handleShow}>add products</Button>
 
         <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Schreibe dein Wunschzettel</Modal.Title>
+          <Modal.Title>Add a Product</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <label> Schreibe deine Wünsche auf <br/><input type="text" value={desc} onChange={(e) => setDesc(e.target.value)}/></label><br/>
-            <label> Wo findet Santa deinen Wunsch<br/><input type="text" value={url} onChange={(e) => setUrl(e.target.value)}/></label>
+            <Stack gap={3}>
+              <div>
+                <label> Product Name <br/><input type="text" value={desc} onChange={(e) => setDesc(e.target.value)}/></label><br/>
+              </div>
+              <div>
+                <label> Place to find?<br/><input type="text" value={url} onChange={(e) => setUrl(e.target.value)}/></label>
+              </div>
+            </Stack>
             </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Schliessen
+            Abort
           </Button>
           <Button variant="primary" onClick={handleClose}>
-            Absenden
+            Add
           </Button>
         </Modal.Footer>
       </Modal>

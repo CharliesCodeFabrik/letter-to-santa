@@ -8,7 +8,7 @@ export const server = new ApolloServer({
     context,
 });
 
-const port = 3000;
+const port = 4000;
 // 2
 server.listen({port}).then(({ url }) => {
     console.log(`🚀  Server ready at ${url}`);

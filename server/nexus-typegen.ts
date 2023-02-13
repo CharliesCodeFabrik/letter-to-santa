@@ -28,6 +28,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
+  AuthPayload: { // root type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Letter: { // root type
     description: string; // String!
     id: number; // Int!
@@ -35,6 +39,12 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  User: { // root type
+    email: string; // String!
+    id: number; // Int!
+    password: string; // String!
+    username: string; // String!
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -48,34 +58,64 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
+  AuthPayload: { // field return type
+    token: string; // String!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Letter: { // field return type
     description: string; // String!
     id: number; // Int!
     url: string; // String!
+    userId: NexusGenRootTypes['User'] | null; // User
   }
   Mutation: { // field return type
     delete: NexusGenRootTypes['Letter']; // Letter!
+    deleteUser: NexusGenRootTypes['User']; // User!
+    login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     post: NexusGenRootTypes['Letter']; // Letter!
+    signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
   }
   Query: { // field return type
     feed: NexusGenRootTypes['Letter'][]; // [Letter!]!
     letter: NexusGenRootTypes['Letter'] | null; // Letter
   }
+  User: { // field return type
+    email: string; // String!
+    id: number; // Int!
+    letters: NexusGenRootTypes['Letter'][]; // [Letter!]!
+    password: string; // String!
+    username: string; // String!
+  }
 }
 
 export interface NexusGenFieldTypeNames {
+  AuthPayload: { // field return type name
+    token: 'String'
+    user: 'User'
+  }
   Letter: { // field return type name
     description: 'String'
     id: 'Int'
     url: 'String'
+    userId: 'User'
   }
   Mutation: { // field return type name
     delete: 'Letter'
+    deleteUser: 'User'
+    login: 'AuthPayload'
     post: 'Letter'
+    signup: 'AuthPayload'
   }
   Query: { // field return type name
     feed: 'Letter'
     letter: 'Letter'
+  }
+  User: { // field return type name
+    email: 'String'
+    id: 'Int'
+    letters: 'Letter'
+    password: 'String'
+    username: 'String'
   }
 }
 
@@ -84,9 +124,22 @@ export interface NexusGenArgTypes {
     delete: { // args
       id: number; // Int!
     }
+    deleteUser: { // args
+      id: number; // Int!
+    }
+    login: { // args
+      email: string; // String!
+      password: string; // String!
+    }
     post: { // args
       description: string; // String!
       url: string; // String!
+      userId: number; // Int!
+    }
+    signup: { // args
+      email: string; // String!
+      name: string; // String!
+      password: string; // String!
     }
   }
   Query: {

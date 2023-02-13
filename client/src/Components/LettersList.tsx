@@ -42,7 +42,7 @@ export function LettersList() {
 
   return (
     <div>
-      <h3>Available Inventory</h3>
+      <h3>Shopping List</h3>
       <div className='lettersListClass'>
       {loading ? (
         <p>Loading ...</p>
@@ -50,16 +50,14 @@ export function LettersList() {
         <Table striped bordered hover size='m'>
           <thead>
             <tr>
-              <th>IDs</th>
-              <th>Wunsch</th>
-              <th>Wo?</th>  
+              <th>Product</th>
+              <th>Place</th>  
             </tr>
           </thead>
           <tbody>
             {data?
                 data.feed.map(({id, description, url}) => (
                   <tr>
-                    <td>{id}</td>
                     <td>{description}</td>
                     <td>{url}</td>
                     <td><DeleteButton deleteID={id}/></td>
@@ -67,7 +65,6 @@ export function LettersList() {
                 ))
             :
               <tr>
-              <td>Letter ID: -1</td>
               <td>Letter Description: Keine</td>
               <td>Letter Url: Keine</td>
             </tr>
