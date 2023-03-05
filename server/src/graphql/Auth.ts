@@ -2,6 +2,7 @@ import { objectType, extendType, nonNull, stringArg } from "nexus";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import { APP_SECRET } from "../utils/auth";
+import { User } from "@prisma/client";
 
 
 
@@ -28,7 +29,7 @@ export const AuthMutation = extendType({
             },
             async resolve(parent, args, context) {
                 // 1
-                const user = await context.prisma.user.findUnique({
+                const user: User | null = await context.prisma.user.findUnique({
                     where: { email: args.email },
                 });
                 if (!user) {
@@ -45,7 +46,7 @@ export const AuthMutation = extendType({
                 }
 
                 // 3
-                const token = jwt.sign({ userId: user.id }, APP_SECRET);
+                const token:string = jwt.sign({ userId: user.id }, APP_SECRET);
 
                 // 4
                 return {
@@ -60,23 +61,23 @@ export const AuthMutation = extendType({
             args: {
                 email: nonNull(stringArg()),
                 password: nonNull(stringArg()),
-                name: nonNull(stringArg()),
+                username: nonNull(stringArg()),
             },
             async resolve(parent, args, context) {
-                const { email, name } = args;
-
+                const { email, username } = args;
                 const password = await bcrypt.hash(args.password, 10);
-
-                const user = await context.prisma.user.create({
-                    data: { email, name, password },
-                });
-
-                const token = jwt.sign({ userId: user.id }, APP_SECRET);
-
-                return {
-                    token,
-                    user,
-                };
+                try{
+                    const user = await context.prisma.user.create({
+                        data: { email, username, password },
+                    });
+                    const token = jwt.sign({ userId: user.id }, APP_SECRET);
+                    return {
+                        token,
+                        user,
+                    };
+                } catch(e){
+                    throw new Error("signup failed!");
+                }      
             },
         });
     },

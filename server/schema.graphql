@@ -18,8 +18,8 @@ type Mutation {
   delete(id: Int!): Letter!
   deleteUser(id: Int!): User!
   login(email: String!, password: String!): AuthPayload!
-  post(description: String!, url: String!, userId: Int!): Letter!
-  signup(email: String!, name: String!, password: String!): AuthPayload!
+  post(description: String!, url: String!): Letter!
+  signup(email: String!, password: String!, username: String!): AuthPayload!
 }
 
 type Query {

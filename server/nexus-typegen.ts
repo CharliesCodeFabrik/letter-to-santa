@@ -134,12 +134,11 @@ export interface NexusGenArgTypes {
     post: { // args
       description: string; // String!
       url: string; // String!
-      userId: number; // Int!
     }
     signup: { // args
       email: string; // String!
-      name: string; // String!
       password: string; // String!
+      username: string; // String!
     }
   }
   Query: {

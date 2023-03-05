@@ -21,33 +21,6 @@ export let User = objectType({
 });
 
 
-export const UserSignUp = extendType({  // 1
-    type: "Mutation",    
-    definition(t) {
-        t.nonNull.field("signup", {  // 2
-            type: "User",  
-            args: {   // 3
-                username: nonNull(stringArg()),
-                email: nonNull(stringArg()),
-                password: nonNull(stringArg()),
-            },
-            
-            async resolve(parent, args, context) {    
-                const { username, email, password} = args;  // 4
-                
-                return context.prisma.user.create({
-                    data: {
-                        username: username,
-                        email: email,
-                        password: password,
-                    }
-                });
-            },
-        });
-    },
-});
-
-
 export const UserDeleteMutation = extendType({  // 1
     type: "Mutation",    
     definition(t) {

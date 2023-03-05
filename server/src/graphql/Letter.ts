@@ -29,7 +29,12 @@ export const LettersQuery = extendType({  // 2
         t.nonNull.list.nonNull.field("feed", {   // 3
             type: "Letter",
             resolve(parent, args, context, info) {    // 4
-                return context.prisma.letter.findMany();
+                const { userId } = context;
+
+                if (!userId) {  // 1
+                    throw new Error("Cannot post without logging in.");
+                }
+                return context.prisma.letter.findMany({where:{userId: userId}});
             },
         });
     },
@@ -64,18 +69,24 @@ export const LinkMutation = extendType({  // 1
             args: {   // 3
                 description: nonNull(stringArg()),
                 url: nonNull(stringArg()),
-                userId: nonNull(intArg()),
             },
             async resolve(parent, args, context) {    
-                const { description, url, userId } = args;  // 4
-                
-                return context.prisma.letter.create({
+                const { description, url} = args;  // 4
+                const { userId } = context;
+
+                if (!userId) {  // 1
+                    throw new Error("Cannot post without logging in.");
+                }
+
+                const newLetter = context.prisma.letter.create({
                     data: {
-                        userId: userId,
-                        description: description,
-                        url: url,
-                    }
+                        description,
+                        url,
+                        user: { connect: { id: userId } },  // 2
+                    },
                 });
+
+                return newLetter;
             },
         });
     },
