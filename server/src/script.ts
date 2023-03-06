@@ -10,6 +10,8 @@ async function main() {
     console.log(allLetter);
     const allUser = await prisma.user.findMany();
     console.log(allUser);
+    const allList = await prisma.list.findMany();
+    console.log(allList);
 }
 
 // 4

@@ -7,30 +7,38 @@ type AuthPayload {
   user: User!
 }
 
-type Letter {
+type Item {
   description: String!
   id: Int!
-  url: String!
+  listId: List
+  location: String!
   userId: User
 }
 
+type List {
+  id: Int!
+  items: [Item!]!
+  name: String!
+  users: [User!]!
+}
+
 type Mutation {
-  delete(id: Int!): Letter!
+  delete(id: Int!): Item!
   deleteUser(id: Int!): User!
   login(email: String!, password: String!): AuthPayload!
-  post(description: String!, url: String!): Letter!
+  post(description: String!, location: String!): Item!
   signup(email: String!, password: String!, username: String!): AuthPayload!
 }
 
 type Query {
-  feed: [Letter!]!
-  letter(id: Int!): Letter
+  feed: [Item!]!
+  item(id: Int!): Item
 }
 
 type User {
   email: String!
   id: Int!
-  letters: [Letter!]!
+  items: [Item!]!
   password: String!
   username: String!
 }

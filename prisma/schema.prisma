@@ -35,6 +35,6 @@ model User {
   username  String
   email     String   @unique
   password  String
-  letters   Item[]
+  items     Item[]
   lists     List[]
 }

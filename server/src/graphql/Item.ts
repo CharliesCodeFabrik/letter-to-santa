@@ -2,20 +2,28 @@ import e from "cors";
 import { extendType, intArg, nonNull, objectType, stringArg, idArg } from "nexus";
 
 
-/*Letter*/
+/*Item*/
 
-export let Letter = objectType({
-    name: "Letter", // 1 
+export let Item = objectType({
+    name: "Item", // 1 
     definition(t) {  // 2
         t.nonNull.int("id"); // 3 
         t.nonNull.string("description"); // 4
-        t.nonNull.string("url"); // 5 
+        t.nonNull.string("location"); // 5 
         t.field("userId", {   // 1
             type: "User",
             resolve(parent, args, context) {  // 2
-                return context.prisma.letter
+                return context.prisma.item
                     .findUnique({ where: { id: parent.id } })
                     .user();
+            },
+        });
+        t.field("listId", {   // 1
+            type: "List",
+            resolve(parent, args, context) {  // 2
+                return context.prisma.item
+                    .findUnique({ where: { id: parent.id } })
+                    .list();
             },
         });
     },
@@ -27,14 +35,14 @@ export const LettersQuery = extendType({  // 2
     type: "Query",
     definition(t) {
         t.nonNull.list.nonNull.field("feed", {   // 3
-            type: "Letter",
+            type: "Item",
             resolve(parent, args, context, info) {    // 4
                 const { userId } = context;
 
                 if (!userId) {  // 1
                     throw new Error("Cannot post without logging in.");
                 }
-                return context.prisma.letter.findMany({where:{userId: userId}});
+                return context.prisma.item.findMany({where:{userId: userId}});
             },
         });
     },
@@ -44,13 +52,13 @@ export const LettersQuery = extendType({  // 2
 export const LetterQuery = extendType({  // 2
     type: "Query",
     definition(t) {
-        t.field("letter", {   // 3
-            type: "Letter",
+        t.field("item", {   // 3
+            type: "Item",
             args: {
                 id: nonNull(intArg())
             },
             resolve(parent, args, context, info) {    // 4
-                return context.prisma.letter.findUnique({
+                return context.prisma.item.findUnique({
                     where: { id: args.id},
                 })
             },
@@ -65,28 +73,28 @@ export const LinkMutation = extendType({  // 1
     type: "Mutation",    
     definition(t) {
         t.nonNull.field("post", {  // 2
-            type: "Letter",  
+            type: "Item",  
             args: {   // 3
                 description: nonNull(stringArg()),
-                url: nonNull(stringArg()),
+                location: nonNull(stringArg()),
             },
             async resolve(parent, args, context) {    
-                const { description, url} = args;  // 4
+                const { description, location} = args;  // 4
                 const { userId } = context;
 
                 if (!userId) {  // 1
                     throw new Error("Cannot post without logging in.");
                 }
 
-                const newLetter = context.prisma.letter.create({
+                const newItem = context.prisma.item.create({
                     data: {
                         description,
-                        url,
+                        location,
                         user: { connect: { id: userId } },  // 2
                     },
                 });
 
-                return newLetter;
+                return newItem;
             },
         });
     },
@@ -100,7 +108,7 @@ export const LetterDeleteMutation = extendType({  // 1
     type: "Mutation",    
     definition(t) {
         t.nonNull.field("delete", {  // 2
-            type: "Letter",  
+            type: "Item",  
             args: {   // 3
                 id: nonNull(intArg()),
             },
@@ -108,7 +116,7 @@ export const LetterDeleteMutation = extendType({  // 1
             async resolve(parent, args, context) {    
                 const { id } = args;  // 4
                 
-                return context.prisma.letter.delete({
+                return context.prisma.item.delete({
                     where: { id: id},
                   })
             },
