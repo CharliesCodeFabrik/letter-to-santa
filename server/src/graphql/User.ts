@@ -9,12 +9,20 @@ export let User = objectType({
         t.nonNull.string("username"); // 4
         t.nonNull.string("email"); // 5 
         t.nonNull.string("password");
-        t.nonNull.list.nonNull.field("letters", {    // 1
-            type: "Letter",
+        t.nonNull.list.nonNull.field("items", {    // 1
+            type: "Item",
             resolve(parent, args, context) {   // 2
                 return context.prisma.user  // 3
                     .findUnique({ where: { id: parent.id } })
-                    .letters();
+                    .items();
+            },
+        });
+        t.nonNull.list.nonNull.field("lists", {    // 1
+            type: "List",
+            resolve(parent, args, context) {   // 2
+                return context.prisma.user  // 3
+                    .findUnique({ where: { id: parent.id } })
+                    .lists();
             },
         });
     },
