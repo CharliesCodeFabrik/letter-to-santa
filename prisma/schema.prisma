@@ -10,13 +10,23 @@ generator client {
 }
 
 // 3
-model Letter {
+model Item {
   id          Int      @id @default(autoincrement()) // 4
   createdAt   DateTime @default(now()) // 5
   description String
-  url         String
+  location    String
   user        User     @relation(fields: [userId], references: [id])
   userId      Int
+  list        List     @relation(fields: [listId], references: [id])
+  listId      Int
+}
+
+model List {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  name      String
+  items     Item[]
+  users     User[]
 }
 
 model User {
@@ -25,5 +35,6 @@ model User {
   username  String
   email     String   @unique
   password  String
-  letters   Letter[]
+  letters   Item[]
+  lists     List[]
 }

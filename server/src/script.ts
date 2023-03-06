@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 // 3
 async function main() {
-    const allLetter = await prisma.letter.findMany();
+    const allLetter = await prisma.item.findMany();
     console.log(allLetter);
     const allUser = await prisma.user.findMany();
     console.log(allUser);
